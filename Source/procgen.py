@@ -1,3 +1,4 @@
+from __future__ import annotations
 import random
 from typing import Iterator, List, Tuple, TYPE_CHECKING
 import tcod
@@ -23,7 +24,7 @@ class Rectangular_Room:
     def inner(self) -> Tuple[slice, slice]:
         return slice(self.x1 + 1, self.x2), slice(self.y1 + 1, self.y2)
     
-def intersects(self, other: Rectangular_Room) -> bool:
+    def intersects(self, other: Rectangular_Room) -> bool:
      return(self.x1 <= other.x2
            and self.x2 >= other.x1
            and self.y1 <= other.y2
