@@ -1,7 +1,7 @@
 from typing import Optional
 import tcod
 import tcod.event
-from actions import Action, Escape_Action, Movement
+from actions import Action, Escape_Action, Bump_Action
 
 
 class Event_Handler(tcod.event.EventDispatch[Action]):
@@ -14,16 +14,16 @@ class Event_Handler(tcod.event.EventDispatch[Action]):
         key = event.sym
         
         if key == tcod.event.KeySym.UP:
-            action = Movement(dx = 0, dy = -1)
+            action = Bump_Action(dx = 0, dy = -1)
         
         elif key == tcod.event.KeySym.DOWN:
-            action = Movement(dx = 0, dy = 1)
+            action = Bump_Action(dx = 0, dy = 1)
             
         elif key == tcod.event.KeySym.LEFT:
-            action = Movement(dx=-1,dy=0)
+            action = Bump_Action(dx=-1,dy=0)
             
         elif key == tcod.event.KeySym.RIGHT:
-            action = Movement(dx=1,dy=0)
+            action = Bump_Action(dx=1,dy=0)
             
         elif key == tcod.event.KeySym.ESCAPE:
             action = Escape_Action()
