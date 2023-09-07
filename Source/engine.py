@@ -1,29 +1,28 @@
-from typing import Set, Iterable, Any
-
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from tcod.context import Context
 from tcod.console import Console
 from tcod.map import compute_fov
-from game_map import Game_Map
 from actions import Escape_Action, Movement
-from entity import Entity
 from input_handler import Event_Handler
+
+if TYPE_CHECKING:
+    from entity import Entity
+    from game_map import Game_Map
 
 
 class Engine:
-    def __init__(self, event_handler: Event_Handler, game_map: Game_Map, player: Entity):
-        self.event_handler = event_handler
-        self.game_map = game_map
+    game_map: Game_Map
+    def __init__(self, player: Entity):
+        self.event_handler: Event_Handler = Event_Handler(self)
         self.player = player
-        self.update_fov()
+   
         
-    def handle_events(self, events: Iterable[Any]) -> None:
-        for event in events:
-            action = self.event_handler.dispatch(event)
-            if action is None:
-                continue
-            action.perform(self, self.player)
-            self.update_fov()
-            
+    def handle_enemy_turns(self) -> None:
+        for entity in self.game_map.entities - {self.player}:
+            print(f'The {entity.name} wonders when it will get to take a real turn.')
+        
+   
     def update_fov(self) -> None:
         # Recompute the visible area based on the Player's point of view.
         self.game_map.visible[:] = compute_fov(
