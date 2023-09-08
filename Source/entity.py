@@ -1,7 +1,12 @@
 from __future__ import annotations
 import copy
-from typing import Optional, Tuple, TypeVar, TYPE_CHECKING
+from typing import Optional, Tuple, Type, TypeVar, TYPE_CHECKING
+from render_order import RenderOrder
+
+from game_map import Game_Map
 if TYPE_CHECKING:
+    from components.AI import BaseAI
+    from components.fighter import Fighter
     from game_map import Game_Map
 T = TypeVar("T", bound = "Entity")
 
@@ -17,6 +22,7 @@ class Entity:
         color: Tuple[int, int, int] = (255, 255, 255),
         name: str = "<Unnamed>",
         blocks_movement: bool = False,
+        render__order: RenderOrder = RenderOrder.CORPSE,
     ):
         
         self.x = x
@@ -25,6 +31,7 @@ class Entity:
         self.color = color
         self.name = name
         self.blocks_movement = blocks_movement
+        self.render_order = render__order
         if gamemap:
             self.gamemap = gamemap
             gamemap.entities.add(self)
@@ -49,4 +56,34 @@ class Entity:
         
     def move(self, dx: int, dy: int) -> None:
         self.x += dx
-        self.y += dy    
+        self.y += dy
+        
+class Actor(Entity):
+    def __init__(
+        self,
+        *,
+        x: int = 0,
+        y: int = 0,
+        char: str = "?",
+        color: Tuple[int,int,int] = (255, 255, 255),
+        name: str = "<Unnamed>",
+        ai_class: Type[BaseAI],
+        fighter: Fighter
+        ):
+        super().__init__(
+            x = x,
+            y = y,
+            char = char,
+            color = color,
+            name = name,
+            blocks_movement = True,
+            render_order = RenderOrder.ACTOR
+            
+        )    
+        self.ai: Optional[BaseAI] = ai_class(self)
+        self.fighter = fighter
+        self.fighter.entity = self
+        
+    @property
+    def is_alive(self) -> bool:
+        return bool(self.ai)
