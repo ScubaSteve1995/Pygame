@@ -2,8 +2,8 @@ import copy
 import tcod
 from engine import Engine
 import entity_factories
-from procgen import *
-from input_handler import Event_Handler
+from procgen import generate_dungeon
+
 
 
 def main()-> None:

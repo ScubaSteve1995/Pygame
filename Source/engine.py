@@ -3,18 +3,18 @@ from typing import TYPE_CHECKING
 from tcod.context import Context
 from tcod.console import Console
 from tcod.map import compute_fov
-from actions import Escape_Action, Movement
-from input_handler import Event_Handler
+from input_handler import MainGameEventHandler
 
 if TYPE_CHECKING:
-    from entity import Entity
+    from entity import Actor
     from game_map import Game_Map
+    from input_handler import Event_Handler
 
 
 class Engine:
     game_map: Game_Map
-    def __init__(self, player: Entity):
-        self.event_handler: Event_Handler = Event_Handler(self)
+    def __init__(self, player: Actor):
+        self.event_handler: Event_Handler = MainGameEventHandler(self)
         self.player = player
    
         
@@ -37,6 +37,12 @@ class Engine:
             
     def render(self, console: Console, context: Context) -> None:
         self.game_map.render(console)
+        
+        console.print(
+            x = 1,
+            y = 47,
+            string = f"HP: {self.player.fighter.hp}/{self.player.fighter.max_hp}",
+        )
         
                 
         context.present(console)

@@ -3,7 +3,6 @@ import copy
 from typing import Optional, Tuple, Type, TypeVar, TYPE_CHECKING
 from render_order import RenderOrder
 
-from game_map import Game_Map
 if TYPE_CHECKING:
     from components.AI import BaseAI
     from components.fighter import Fighter
@@ -77,7 +76,7 @@ class Actor(Entity):
             color = color,
             name = name,
             blocks_movement = True,
-            render_order = RenderOrder.ACTOR
+            #render_order = RenderOrder.ACTOR
             
         )    
         self.ai: Optional[BaseAI] = ai_class(self)

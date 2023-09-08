@@ -5,7 +5,7 @@ from typing import Optional, Tuple, TYPE_CHECKING
 if TYPE_CHECKING:
     from engine import Engine
     from entity import Entity, Actor
-    from game_map import Game_Map
+    
 
 class Action:
     def __init__(self, entity: Actor) -> None:
@@ -77,15 +77,15 @@ class Melee_Action(ActionWithDirection):
 
 class Movement(ActionWithDirection):
    
-    def perform(self, gamemap: Game_Map) -> None:
+    def perform(self) -> None:
         dest_x, dest_y = self.dest_xy
-        self.gamemap = gamemap
         
-        if not self.gamemap.in_bounds(dest_x, dest_y):
+        
+        if not self.engine.gamemap.in_bounds(dest_x, dest_y):
             return # Destination is out of bounds.
-        if not self.gamemap.tiles["walkable"][dest_x, dest_y]:
+        if not self.engine.gamemap.tiles["walkable"][dest_x, dest_y]:
             return # Destination is blocked by a tile.
-        if self.gamemap.get_blocking_entity_at_location(dest_x, dest_y):
+        if self.engine.gamemap.get_blocking_entity_at_location(dest_x, dest_y):
             return # Destination is blocked by an entity.
         
         self.entity.move(self.dx, self.dy)
