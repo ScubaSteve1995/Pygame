@@ -5,7 +5,7 @@ from engine  import Engine
 from entity import Entity
 
 if TYPE_CHECKING:
-    from engine import Engine
+    #from engine import Engine
     from entity import Entity
 
 class Action:
